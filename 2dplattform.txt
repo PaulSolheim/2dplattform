@@ -1,0 +1,105 @@
+2D Plattformer:
+
+Lage PLayer scenen:
+
+lag en mappe under res://
+høyreklikk, kall den "src"
+
+klikk "custom node"
+skriv "kinem",
+velg "KinematicBody2D"
+(kan bevege seg og kollidere)
+rename til "Player"
+
+legg til collision:
+velg Player noden,
+skriv "collis",
+velg "CollisionShape2D"
+under Shape,
+create new rectangleShape2D
+zoom inn med musehjulet
+(pass på at du er i select mode)
+
+velg Player noden
+dra "Player.png" inn i scenen
+klikk OK
+dra "player" over collisionShape2D
+i hierarkiet så vi kan se kollisjonssonen
+
+skru på snapping (magnet ikon)
+klikk tre prikker til høyre
+velg pixel snapping
+flytt spilleren til bunnen midt på
+origo-linjen
+
+velg collisionShape2D i hierarkiet
+juster størrelsen på kollisjonssonen
+litt mindre enn Player
+
+Ctrl-S for å lagre scenen,
+lag en mappe under src,
+kall den "Actors", klikk OK
+klikk Save
+
+velg Player noden på toppen,
+klikk skript ikonet,
+velg "Empty" Template (mal)
+klikk Create
+
+Vi skal lage et skript til,
+velg fil, create script i menyen
+naviger til Actors mappen,
+endre navnet til "Actor.gd"
+klikk Open
+klikk Create
+
+(dette skriptet skal både
+player og enemy skriptene
+"arve" fra. "arv" gjør at vi slipper
+å skrive samme kode flere ganger)
+
+endre første linja til
+extends KinematicBody2D
+
+legg til koden:
+class_name Actor
+
+Ctrl-S for å lagre
+
+gå til Player skripet
+endre første linje til
+extends Actor
+
+Gå til Actor skriptet:
+
+legg inn koden:
+
+func _physics_process(delta: float) -> void:
+	var velocity: = Vector2(300, 0)
+	move_and_slide(velocity)
+
+Ctrl-S for å lagre
+
+Gå til Player scenen,
+Dra Player inn i området som viser
+skjermens størrelse
+
+Klikk F6 for å teste scenen,
+beveger spilleren seg mot høyre?
+
+la oss legge til gravitasjon:
+
+legg til:
+
+export var gravity: = 3000.0
+
+var velocity: = Vector2.ZERO
+
+endre linja i _physics_process til
+
+velocity.y += gravity * delta
+
+Ctrl-S for å lagre,
+trykk F6 for å teste spillet,
+Faller spilleren nedover?
+

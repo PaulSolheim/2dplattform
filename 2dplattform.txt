@@ -87,6 +87,8 @@ skjermens størrelse
 Klikk F6 for å teste scenen,
 beveger spilleren seg mot høyre?
 
+HIT ---
+
 la oss legge til gravitasjon:
 
 legg til:
@@ -103,3 +105,358 @@ Ctrl-S for å lagre,
 trykk F6 for å teste spillet,
 Faller spilleren nedover?
 
+Legg til variabel for max fart:
+
+export var speed = Vector2(300.0, 1000.0)
+
+Nå skal vi lage et level,
+først må vi flytte Player til origo (0,0)
+gå til 2D,
+klikk Toppnoden (Player)
+Gå til Transform i Inspektøren (under Node2D)
+Klikk "Reset" ikonet (ved Position)
+Sjekk at Player flyttes til Origo (0,0)
+
+Klikk "Assets" i FileSystem vinduet
+Velg fra menyen: "Scene" -> "Ny Scene"
+Klikk 2D Scene for å legge inn en Node2D toppnode
+Klikk to ganger eller Høyreklikk og velg "endre navn"
+Skriv "LevelTemplate"
+
+Ctrl-S for å lagre
+Velg "Src" mappa
+Klikk "Lag Mappe" knappen
+Kall den nye mappa "Levels"
+Klikk "Lagre" knappen
+
+La oss legge til en Tilemap i scenen,
+Klikk "+"
+skriv "tile"
+(TileMap velges automatisk)
+klikk Lag knappen
+I Inspektøren, ved TileSet, velg Ny TileSet
+Klikk på TileSet for å få frem TileSet editoren
+(Under i midten)
+
+Klikk + ikonet, velg assets mappa,
+velg TileSet.png filen
+
++ New Single Tile,
+klikk og drag i firkanten, klikk "enable snap"
+
+gå til snap options i inspektøren
+sett "Step" til:
+x:80 / y:80
+
+med select (pila) valgt, klikk i "tilen"
+og den velger automatisk en firkant (80/80)
+
+Legg til Collision for Tilen.
+
+Nå kan du male med den valgte tilen,
+lag vegger og gulv til scenen.
+
+Klikk TileMap i Scenen,
+sett "Cell Size" til 80 / 80.
+
+Dra Player.tscn inn i scenen
+for å plassere spilleren.
+
+Test Spillet.
+
+La oss sette opp fysikklagene!
+gå til prosjekt - prosjekt settings i menyen
+gå til "2d physics" (layer)
+gi lagene 1 - 4 navnene:
+player,
+enemies,
+coins,
+world
+(deretter lukk vinduet)
+
+Gå til TileMap i scenen
+Under Layer sett "world"
+under Mask sett ingenting
+
+Åpne Player scenen
+Endre Layer Mask til: 
+enemies, coins, og world
+
+Ctrl-S for å lagre,
+gå til SceneTemplate,
+F6 for å teste scenen.
+
+HIT ---
+
+Forklare feilen fra forrige uke
+
+(hente ned versjon fra github?)
+
+La oss sette input mapping:
+Prosjektinnstillinger
+Input Map - tabben
+
+skriv "move_left" på toppen
+klikk "Legg Til" knappen
++ tegnet ved siden av "move_left"
+velg "Key", trykk "A" tasten, OK
++ tegnet pånytt
+velg "Key", trykk "pil venstre" tasten, OK
+
+skriv "move_right" på toppen
+klikk "Legg Til" knappen
++ tegnet ved siden av "move_right"
+velg "Key", trykk "D" tasten, OK
++ tegnet pånytt
+velg "Key", trykk "pil høyre" tasten, OK
+
+skriv "jump" på toppen
+klikk "Legg Til" knappen
++ tegnet ved siden av "jump"
+velg "Key", trykk "W" tasten, OK
++ tegnet pånytt
+velg "Key", trykk "pil opp" tasten, OK
+
+(her kan du også legge inn joystick
+akser og knapper)
+
+Lukk vinduet
+
+La oss få spilleren til å bevege seg:
+
+Åpne "Player" skriptet
+Skriv:
+
+func _physics_process(delta: float) -> void:
+	var direction: = Vector2(
+		Input.get_action_strength("move_right") 
+		- Input.get_action_strength("move_left"),
+		1.0
+	)
+	velocity = speed * direction
+	velocity = move_and_slide(velocity, Vector2.UP)
+
+Gå til Actor skriptet:
+Fjern linjen med move_and_slide
+	
+Spilleren er litt treig:
+I Player scenen,
+under Script Variables
+endre Speed x til 800
+
+Test pånytt
+
+La oss legge inn hopping:
+
+I Player skriptet
+endre linjen med 1.0 (Y-verdien) til:
+		-1.0 if Input.is_action_just_pressed("jump") and is_on_floor() else 1.0
+
+La oss gjøre koden lettere å forstå:
+
+marker koden fra og med "Vector2("
+til og med ")" 
+(fire linjer)
+Ctrl-X for å klippe ut,
+
+lag en ny funksjon:
+func get_direction() -> Vector2:
+	return (Ctrl-V for å lime inn her)
+	
+legg inn kall til den nye funksjonen
+der du klippet ut koden (linje 4), dvs:
+	var direction: = get_direction()
+
+Synes du koden er lettere å forstå nå?
+
+lag en ny funksjon på slutten:
+
+func calculate_move_velocity(
+		linear_velocity: Vector2,
+		direction: Vector2,
+		speed: Vector2
+	) -> Vector2:
+	var new_velocity: = linear_velocity
+	new_velocity.x = speed.x * direction.x
+	new_velocity.y += gravity * get_physics_process_delta_time()
+	if direction.y == -1.0:
+		new_velocity.y = speed.y * direction.y
+	return new_velocity
+
+forandre linja der vi setter velocity fra:
+	velocity = speed * direction
+til
+	velocity = calculate_move_velocity(velocity, direction, speed)
+
+Gå til Actor skriptet og fjern linjen:
+		velocity.y += gravity * delta
+
+Test om du kan hoppe!
+
+Nå kan vi legge inn avbrutt hopping:
+(Litt som i Super Mario)
+
+I Player skriptet, i begynnelsen av _physics_process funksjonen,
+legg til:
+
+	var is_jump_interrupted: = Input.is_action_just_released("jump") and velocity.y < 0.0
+
+legg til is_jump_interrupted som siste parameter
+ved kall til calculate_move_velocity
+og i definisjonen av calculate_move_velocity:
+
+	is_jump_interrupted: bool
+
+legg til i calculate_move_velocity,
+rett før linjen med "return new_velocity":
+
+	if is_jump_interrupted:
+		new_velocity.y = 0.0
+
+Test spillet, kan du "avbryte" hoppet underveis?
+
+Vi kan gjøre calculate_move_velocity
+litt lettere å lese:
+med Player skriptet fremme,
+fra menyen, under søk, velg "Erstatt"
+skriv i øverste linje: "new_velocity"
+skriv i nederste linje: "out"
+trykk på "Erstatt Alle" knappen
+
+Synes du det er lettere å lese denne funksjonen nå?
+
+La oss endre velocity til _velocity og forklare
+forskjellen på public og private variabler.
+(Bruk "Find in files", Huk av for "Hele ord"!),
+Bruk "Erstatt" knappen, skriv inn det nye ordet,
+bruk "Erstatt Alle" knappen.
+
+Lagt inn Coin scene og kode + LightOccluder (skygger)
+Lagt inn Portal scene og kode (bytte scene)
+Lagt inn Bumper scene
+Lagt inn et "tomt" Level01
+Lagt inn et lys i LevelTemplate
+Lagt til Camera2D som følger Player
+
+HIT ---
+
+La oss lage en fiende,
+hvis vi kolliderer med den, så dør vi
+hvis vi hopper på den, så dør den
+
+Fra Menyen, under Scene, velg Ny Scene
+klikk "custom node"
+skriv "kinem",
+velg "KinematicBody2D"
+(kan bevege seg og kollidere)
+rename til "Enemy"
+
+legg til collision:
+velg Enemy noden,
+skriv "collis",
+velg "CollisionShape2D"
+under Shape,
+create new rectangleShape2D
+zoom inn med musehjulet
+(pass på at du er i select mode)
+
+velg Enemy noden
+dra "Enemy.png" inn i scenen
+klikk OK
+dra "enemy" over collisionShape2D
+i hierarkiet så vi kan se kollisjonssonen
+
+skru på snapping (magnet ikon)
+klikk tre prikker til høyre
+velg pixel snapping
+flytt spilleren til bunnen midt på
+origo-linjen
+
+velg collisionShape2D i hierarkiet
+juster størrelsen på kollisjonssonen
+så sonen dekker nederste del av figuren.
+Vi skal lage en egen sone for "Stomping".
+
+Klikk toppnoden,
+Under Collision,
+velg Layer: enemy
+Mask:	world
+
+La oss lage stompdetector:
+Velg toppnoden,
++ ikonet,
+skriv "area",
+Velg Area2D,
+rename til "StompDetector"
+under collision,
+fjern fra Layer,
+(Mask skal være player)
+
++ ikonet,
+skriv collis
+velg CollisionShape2D,
+juster størrelsen så den dekker toppen,
+
+Ctrl-S for å lagre scenen,
+legg den under Src -> Actors mappa, 
+klikk OK, klikk Save
+
+Klikk Toppnoden,
+legg til skript,
+velg "empty" og Actor mappa
+Lag knappen
+
+I skriptet,
+endre:
+extends KinematicBody2D
+til:
+extends Actor
+
+Skriv koden:
+
+func _ready() -> void:
+	_velocity.x = -speed.x
+
+func _physics_process(delta: float) -> void:
+	_velocity.y += gravity * delta
+	if is_on_wall():
+		_velocity.x *= -1.0
+	_velocity.y = move_and_slide(_velocity, Vector2.UP).y
+
+Ctrl-S for å lagre,
+Dra en Enemy.tscn inn i LevelTemplate scenen
+F6 eller F5 for å teste scenen,
+Går fienden frem og tilbake?
+Starter den med å gå mot oss?
+Kolliderer den med vegger og snur?
+
+Gå til scenen,
+klikk "Stompdetector",
+klikk node tabben,
+velg "body entered"
+klikk "Koble til",
+velg Player skriptet
+Klikk "OK" eller "Lag" knapp
+
+Skriv inn kode under funksjonen:
+
+func on_Enemy_body_entered():
+	queue_free()
+	
+Test om vi dør når vi kolliderer med fienden.
+
+Hvis det ikke fungerer må vi justere litt
+størrelse og plassering på kollisjons-sonene.
+
+Lag Level01 til et kult og passe vanskelig Level!
+
+Hvis tid:
+Lag Level02 (kopier Level01 eller LevelTemplate)
+Gjør Level02 litt vanskeligere enn Level01.
+
+Sett opp overgang fra Portal i Level01
+til Level02.
+
+Lærte du noe nytt idag?
+
+Neste onsdag er siste før Jul.

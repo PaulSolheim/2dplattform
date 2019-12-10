@@ -2,6 +2,12 @@ extends Actor
 
 export var stomp_impulse: = 1400.0
 
+func _on_EnemyDetector_body_entered(body):
+	queue_free()
+
+func _on_EnemyDetector_area_entered(area):
+	_velocity.y = - stomp_impulse
+
 func _on_StompDetector_area_entered(area):
 	_velocity.y = - stomp_impulse
 
@@ -32,5 +38,7 @@ func calculate_move_velocity(
 	if is_jump_interrupted:
 		out.y = 0.0
 	return out
+
+
 
 

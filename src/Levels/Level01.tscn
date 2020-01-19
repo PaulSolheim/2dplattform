@@ -1,11 +1,14 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://assets/background.png" type="Texture" id=1]
 [ext_resource path="res://assets/tileset.png" type="Texture" id=2]
 [ext_resource path="res://src/objects/Portal2D.tscn" type="PackedScene" id=3]
-[ext_resource path="res://assets/light.png" type="Texture" id=4]
-[ext_resource path="res://src/Actors/Player.tscn" type="PackedScene" id=5]
-[ext_resource path="res://src/objects/Coin.tscn" type="PackedScene" id=6]
+[ext_resource path="res://src/Levels/Level02.tscn" type="PackedScene" id=4]
+[ext_resource path="res://assets/light.png" type="Texture" id=5]
+[ext_resource path="res://src/Actors/Player.tscn" type="PackedScene" id=6]
+[ext_resource path="res://src/objects/Bumper.tscn" type="PackedScene" id=7]
+[ext_resource path="res://src/objects/Enemy.tscn" type="PackedScene" id=8]
+[ext_resource path="res://src/objects/Coin.tscn" type="PackedScene" id=9]
 
 [sub_resource type="ConvexPolygonShape2D" id=1]
 points = PoolVector2Array( 0, 0, 80, 0, 80, 80, 0, 80 )
@@ -43,16 +46,17 @@ tile_set = SubResource( 2 )
 cell_size = Vector2( 80, 80 )
 collision_layer = 8
 format = 1
-tile_data = PoolIntArray( 0, 0, 0, 65536, 0, 0, 131072, 0, 0, 196608, 0, 0, 262144, 0, 0, 327680, 0, 0, 393216, 0, 0, 458752, 0, 0, 524288, 0, 0, 589824, 0, 0, 655360, 0, 0, 720896, 0, 0, 786432, 0, 0, 851968, 0, 0, 851969, 0, 0, 851970, 0, 0, 851971, 0, 0, 851972, 0, 0, 917504, 0, 0, 917505, 0, 0, 917506, 0, 0, 917507, 0, 0, 917508, 0, 0 )
+tile_data = PoolIntArray( 0, 0, 0, 65536, 0, 0, 131072, 0, 0, 196608, 0, 0, 262144, 0, 0, 327680, 0, 0, 393216, 0, 0, 458752, 0, 0, 458765, 0, 0, 458766, 0, 0, 524288, 0, 0, 589824, 0, 0, 589834, 0, 0, 589835, 0, 0, 655360, 0, 0, 655415, 0, 0, 720896, 0, 0, 720903, 0, 0, 720904, 0, 0, 720929, 0, 0, 720930, 0, 0, 720939, 0, 0, 720951, 0, 0, 786432, 0, 0, 786457, 0, 0, 786458, 0, 0, 786459, 0, 0, 786465, 0, 0, 786466, 0, 0, 786467, 0, 0, 786468, 0, 0, 786469, 0, 0, 786470, 0, 0, 786471, 0, 0, 786472, 0, 0, 786475, 0, 0, 786476, 0, 0, 786477, 0, 0, 786478, 0, 0, 786479, 0, 0, 786480, 0, 0, 786481, 0, 0, 786482, 0, 0, 786483, 0, 0, 786484, 0, 0, 786485, 0, 0, 786486, 0, 0, 786487, 0, 0, 851968, 0, 0, 851969, 0, 0, 851970, 0, 0, 851971, 0, 0, 851972, 0, 0, 851973, 0, 0, 851974, 0, 0, 851975, 0, 0, 851976, 0, 0, 851977, 0, 0, 851978, 0, 0, 851979, 0, 0, 851980, 0, 0, 851981, 0, 0, 851982, 0, 0, 851983, 0, 0, 851993, 0, 0, 851994, 0, 0, 851995, 0, 0, 851996, 0, 0, 851997, 0, 0, 851998, 0, 0, 851999, 0, 0, 852000, 0, 0, 852001, 0, 0, 852008, 0, 0, 852011, 0, 0, 917504, 0, 0, 917505, 0, 0, 917506, 0, 0, 917507, 0, 0, 917508, 0, 0, 917509, 0, 0, 917510, 0, 0, 917511, 0, 0, 917512, 0, 0, 917513, 0, 0, 917514, 0, 0, 917515, 0, 0, 917516, 0, 0, 917517, 0, 0, 917518, 0, 0, 917519, 0, 0, 917528, 0, 0, 917529, 0, 0, 917530, 0, 0, 917531, 0, 0, 917532, 0, 0, 917534, 0, 0, 917535, 0, 0, 917536, 0, 0, 917544, 0, 0, 917545, 0, 0, 917546, 0, 0, 917547, 0, 0, 983055, 0, 0, 983063, 0, 0, 983064, 0, 0, 983065, 0, 0, 1048591, 0, 0, 1048592, 0, 0, 1048593, 0, 0, 1048594, 0, 0, 1048595, 0, 0, 1048596, 0, 0, 1048597, 0, 0, 1048598, 0, 0, 1048599, 0, 0, 1048600, 0, 0, 1048601, 0, 0, 1114127, 0, 0, 2097141, 0, 0 )
 
 [node name="Portal2D" parent="." instance=ExtResource( 3 )]
-position = Vector2( 2130, 1352 )
+position = Vector2( 3608, 823 )
+next_scene = ExtResource( 4 )
 
 [node name="Lights" type="Node2D" parent="."]
 
 [node name="Light2D" type="Light2D" parent="Lights"]
 position = Vector2( 632, 860 )
-texture = ExtResource( 4 )
+texture = ExtResource( 5 )
 texture_scale = 2.0
 range_layer_min = -100
 shadow_enabled = true
@@ -60,10 +64,31 @@ shadow_gradient_length = 2.0
 shadow_filter = 2
 shadow_filter_smooth = 4.0
 
-[node name="Player" parent="." instance=ExtResource( 5 )]
+[node name="Player" parent="." instance=ExtResource( 6 )]
 position = Vector2( 267, 870 )
+
+[node name="Bumper" parent="." instance=ExtResource( 7 )]
+position = Vector2( 1868, 1173 )
+
+[node name="Enemy" parent="." instance=ExtResource( 8 )]
+position = Vector2( 1546, 1280 )
 
 [node name="Coins" type="Node2D" parent="."]
 
-[node name="Coin" parent="Coins" instance=ExtResource( 6 )]
+[node name="Coin" parent="Coins" instance=ExtResource( 9 )]
 position = Vector2( 598, 783 )
+
+[node name="Coin2" parent="Coins" instance=ExtResource( 9 )]
+position = Vector2( 898, 602 )
+
+[node name="Coin3" parent="Coins" instance=ExtResource( 9 )]
+position = Vector2( 1144, 475 )
+
+[node name="Enemy2" parent="." instance=ExtResource( 8 )]
+position = Vector2( 2378, 995 )
+
+[node name="Enemy3" parent="." instance=ExtResource( 8 )]
+position = Vector2( 2994, 920 )
+
+[node name="Enemy4" parent="." instance=ExtResource( 8 )]
+position = Vector2( 3908, 935 )

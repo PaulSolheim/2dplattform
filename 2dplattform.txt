@@ -459,4 +459,123 @@ til Level02.
 
 Lærte du noe nytt idag?
 
-Neste onsdag er siste før Jul.
+--- HIT 2020
+
+Kode poeng og død
+
+scene
+new scene
+Custom Node
+rename til PlayerData
+save
+lag en ny mappe
+AutoLoad
+New script:
+
+extends Node
+
+signal score_updated
+signal player_died
+
+var score: = 0 setget set_score
+var deaths: = 0 setget set_deaths
+
+func set_score(value: int) -> void:
+	score = value
+	emit_signal("score_updated")
+	
+func set_deaths(value: int) -> void:
+	deaths = value
+	emit_signal("player_died")
+
+La oss gjøre så dette skriptet lastes automatisk
+når programmet starter:
+
+Prosjektinnstillinger
+AutoLoad tabben
+Bla til PlayerData scenen i AutoLoads mappa
+Add knappen
+Lukk knappen
+
+Åpne Player skriptet
+
+La oss lage en funksjon for død:
+
+func die() -> void:
+	PlayerData.deaths += 1
+	queue_free()
+
+endre:
+func _on_EnemyDetector_body_entered(body):
+	die()
+
+La oss få poeng når vi stomper en fiende:
+Åpne Enemy skriptet
+Legg til
+
+export var score: = 100
+
+endre:
+func die() -> void:
+	queue_free
+	PlayeData.score += score
+
+Åpne Coin scenen, gå til skriptet:
+
+endre til:
+
+func picked() -> void:
+	PlayerData.score += score
+	anim_player.play("picked")
+	
+Gå til PlayerData skriptet:
+legg til:
+
+func reset() -> void:
+	score = 0
+	deaths = 0
+
+(Kan spille og bruke Remote tabben
+for å se at score og deaths oppdateres
+på høyre side)
+
+La oss lage UI
+
+New scene,
+Velg UserInterface Node
+Rename til UserInterface
+save til UserInterface mappa
+dra ui_theme til Theme egenskapen
+Legg til en Label for score, + Label
+Layout: Top Right
+Dra litt ned og til venstre
+Align teksten til Right
+Angi teksten:
+Score: %s
+
+Velg topp noden
++ Node
+skriv "color", velg ColorRect
+Velg Layout -> Full Rect
+Velg en svart farge
+Endre Transparency til ca: 60
+Endre navnet på noden til: PauseOverlay
+
+Finn title scenen i UserInterface mappa
+dra den inn under PauseOverlay
+endre tekst til "Paused"
+layout Centered
+
++ Node, VBoxContainer
+Layout Center, resize
+endre navnet til PauseMenu
+
+Velg QuitButton og SceneChangeButton
+Dra de inn under PauseMenu
+endre teksten på SceneChangeButton til:
+Main Screen
+forandre Next scene path til MainScreen scenen.
+
+Lag en RetryButton ved å kopiere fra SceneChangeButton
+
+HIT kom jeg idag.

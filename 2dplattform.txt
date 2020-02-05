@@ -518,7 +518,7 @@ export var score: = 100
 endre:
 func die() -> void:
 	queue_free
-	PlayeData.score += score
+	PlayerData.score += score
 
 Åpne Coin scenen, gå til skriptet:
 

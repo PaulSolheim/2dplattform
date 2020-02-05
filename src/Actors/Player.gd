@@ -3,7 +3,7 @@ extends Actor
 export var stomp_impulse: = 1400.0
 
 func _on_EnemyDetector_body_entered(body):
-	queue_free()
+	die()
 
 func _on_EnemyDetector_area_entered(area):
 	_velocity.y = - stomp_impulse
@@ -39,6 +39,8 @@ func calculate_move_velocity(
 		out.y = 0.0
 	return out
 
-
+func die() -> void:
+	PlayerData.deaths += 1
+	queue_free()
 
 

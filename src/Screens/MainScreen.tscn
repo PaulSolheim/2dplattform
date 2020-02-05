@@ -39,11 +39,9 @@ margin_bottom = 22.0
 rect_scale = Vector2( 3.92, 2.08 )
 
 [node name="PlayButton" parent="Menu" instance=ExtResource( 4 )]
-margin_right = 68.0
-margin_bottom = 37.0
+margin_bottom = 22.0
 next_scene_path = "res://src/Levels/Level01.tscn"
 
 [node name="QuitButton" parent="Menu" instance=ExtResource( 5 )]
-margin_top = 41.0
-margin_right = 68.0
-margin_bottom = 78.0
+margin_top = 26.0
+margin_bottom = 48.0
